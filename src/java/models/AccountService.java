@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -8,20 +9,27 @@ import java.io.Serializable;
  */
 public class AccountService implements Serializable {
 
-    public AccountService() {
+    private ArrayList<User> authorizedUsers;
 
+    public AccountService() {
+        authorizedUsers = new ArrayList<>();
+        User abe = new User("abe", "password");
+        User barb = new User("barb", "password");
+
+        authorizedUsers.add(abe);
+        authorizedUsers.add(barb);
     }
 
-    public boolean login(String username, String password) {
-        if (username == null || username.equals("") || password == null || password.equals("")) {
-            return false;
-        }
-        
-        if (username.toLowerCase().equals("abe") || username.toLowerCase().equals("barb") || password.equals("password")){
-            return true;
+    public User login(String username, String password) {
+        User authUser = null;
+
+        for (User user : authorizedUsers) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                authUser = new User(username, null);
+            }
         }
 
-        return false;
+        return authUser;
     }
 
 }
